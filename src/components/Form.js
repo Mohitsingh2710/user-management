@@ -1,5 +1,5 @@
-import { useState, useEffect } from "react";
-import {useUserContext} from '../context/UserList';
+import { useState, useEffect, useRef } from "react";
+import { useUserContext } from "../context/UserList";
 import "../App.css";
 
 export default function Form({ title, currUser, closeModal }) {
@@ -13,7 +13,8 @@ export default function Form({ title, currUser, closeModal }) {
     hobbies: "",
   });
 
-  const {users, setUsers} =useUserContext();
+  const { users, setUsers } = useUserContext();
+  const modalRef = useRef(null);
 
   useEffect(() => {
     if (!currUser) {
@@ -35,6 +36,21 @@ export default function Form({ title, currUser, closeModal }) {
     localStorage.setItem("users", JSON.stringify(users));
   }, [users]);
 
+  // Adding an event listener to detect clicks outside the modal
+  useEffect(() => {
+    function handleClickOutside(event) {
+      if (modalRef.current && !modalRef.current.contains(event.target)) {
+        closeModal();
+      }
+    }
+
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, [closeModal]);
+
+  //  Handling the changes in the input tags
   const handleChange = (e) => {
     const { name, value } = e.target;
     setUser({ ...user, [name]: value });
@@ -76,7 +92,7 @@ export default function Form({ title, currUser, closeModal }) {
 
   return (
     <div className="modal-container">
-      <div className="modal">
+      <div className="modal" ref={modalRef}>
         <h1>{title}</h1>
 
         {/* Marked Name as Required Field */}
@@ -128,6 +144,7 @@ export default function Form({ title, currUser, closeModal }) {
               readOnly={title === "View User" ? true : false}
               value={user.dob}
               onChange={handleChange}
+              max={new Date().toISOString().split("T")[0]}
               required={true}
             />
           </div>
@@ -159,7 +176,11 @@ export default function Form({ title, currUser, closeModal }) {
             ></textarea>
           </div>
 
-          <button style={{display:"block"}} className="delete-btn" onClick={closeModal}>
+          <button
+            style={{ display: "block" }}
+            className="delete-btn"
+            onClick={closeModal}
+          >
             close
           </button>
           <button
