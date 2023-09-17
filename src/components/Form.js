@@ -72,19 +72,12 @@ export default function Form({ title, currUser, closeModal }) {
     const selectedUserIndex = users.findIndex(
       (existingUser) => existingUser.id === user.id
     );
-    // console.log(selectedUserIndex);
+
     let updatedArray = [...users, user];
     if (users?.length > 0 && selectedUserIndex !== -1) {
       users[selectedUserIndex] = user;
       updatedArray = users;
     }
-
-    // Directly setting the state variable users to the updatedArray.
-    // This can be problematic in React because it may not trigger a
-    // re-render of the component. React uses a concept called "reconciliation"
-    //  to determine when to re-render components, and when you directly set the
-    //  state to a new object or array, React may not detect the change, and the
-    //  component won't re-render as expected.
 
     setUsers((prevValue) => [...updatedArray]);
     closeModal();
