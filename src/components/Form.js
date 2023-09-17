@@ -18,7 +18,7 @@ export default function Form({ title, currUser, closeModal }) {
   useEffect(() => {
     if (!currUser) {
       setUser({
-        id: Math.floor(Math.random() * 100000),
+        id: Date.now(),
         name: "",
         age: 0,
         gender: "male",
@@ -42,6 +42,7 @@ export default function Form({ title, currUser, closeModal }) {
 
   const handleSubmit = (e) => {
     e.preventDefault();
+
     if (user.age < 0) {
       alert("Enter Valid Age.");
       return;

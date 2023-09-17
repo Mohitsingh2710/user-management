@@ -7,7 +7,6 @@ function Pagination({users,pageNo,setPageNo, pageSize}) {
         <button style={{border : "2px solid grey",borderRadius: "10px"}} disabled={pageNo===1? true: false} onClick={()=>setPageNo(pageNo-1)}>Prev</button>
        {
         [...Array(Math.ceil(users.length/pageSize))].map((_,i)=>{
-             console.log("index", i,"page", pageNo);
           return  <button key={i+1} id={(pageNo===(i+1))?'btn-selected':""} onClick={()=>setPageNo(i+1)}>{i+1}</button>
 })
        }
